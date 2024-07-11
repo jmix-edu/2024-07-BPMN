@@ -4,40 +4,14 @@
     <startEvent id="startEvent1" name="Feed developer">
       <documentation>Start event of the pizza process</documentation>
       <extensionElements>
-        <jmix:formData type="input-dialog" openMode="DIALOG">
-          <jmix:formFields>
-            <jmix:formField id="message" caption="" type="string" editable="true" required="false" />
-            <jmix:formField id="pizzaEater" caption="" type="entity" editable="true" required="true">
-              <jmix:formFieldProperty name="entityName" value="User" />
-              <jmix:formFieldProperty name="uiComponent" value="entityPicker" />
-              <jmix:formFieldProperty name="lookupScreen" value="" />
-            </jmix:formField>
-          </jmix:formFields>
-        </jmix:formData>
+        <jmix:formData type="jmix-screen" openMode="DIALOG" screenId="SecondDemoProcessForm" />
       </extensionElements>
       <outgoing>Flow_0mcrag0</outgoing>
     </startEvent>
     <userTask id="Activity_0c1cl9r" name="Choose pizza" flowable:assignee="${pizzaEater.username}" jmix:assigneeSource="processVariable" jmix:assigneeValue="pizzaEater">
       <documentation>Now it uses the class for the Pizza item selection</documentation>
       <extensionElements>
-        <jmix:formData type="input-dialog" openMode="DIALOG">
-          <jmix:formFields>
-            <jmix:formField id="message" caption="Message" type="string" editable="false" required="false" />
-            <jmix:formField id="pizzaItem" caption="" type="entity-list" editable="true" required="true">
-              <jmix:formFieldProperty name="uiComponent" value="ComboBox" />
-              <jmix:formFieldProperty name="entityName" value="PizzaType" />
-              <jmix:formFieldProperty name="query" value="select p from PizzaType p" />
-              <jmix:formFieldEnumValue value="MARGARITA" caption="Margarita" />
-              <jmix:formFieldEnumValue value="FOUR_CHEASES" caption="Four cheases" />
-              <jmix:formFieldEnumValue value="WITH_MEAT" caption="With meat" />
-            </jmix:formField>
-            <jmix:formField id="specialRequrements" caption="" type="multilineString" editable="true" required="false" />
-          </jmix:formFields>
-          <jmix:formOutcomes>
-            <jmix:formOutcome id="chosen" caption="Chosen" icon="THUMBS_UP" />
-            <jmix:formOutcome id="not_hungry" caption="Not hungry" icon="THUMBS_DOWN" />
-          </jmix:formOutcomes>
-        </jmix:formData>
+        <jmix:formData type="input-dialog" openMode="DIALOG" />
       </extensionElements>
       <incoming>Flow_0haespa</incoming>
       <outgoing>Flow_17avi1j</outgoing>
@@ -101,7 +75,7 @@
     <endEvent id="Event_05fw9jx" name="Enjoy pizza">
       <incoming>Flow_14fb3fc</incoming>
     </endEvent>
-    <sequenceFlow id="Flow_0mcrag0" sourceRef="startEvent1" targetRef="Activity_1oulw4b" />
+    <sequenceFlow id="Flow_0mcrag0" sourceRef="startEvent1" targetRef="Activity_0e6sxg5" />
     <sequenceFlow id="Flow_17avi1j" sourceRef="Activity_0c1cl9r" targetRef="Gateway_0uhd6dc">
       <extensionElements>
         <jmix:conditionDetails conditionSource="userTaskOutcome" />
@@ -162,7 +136,7 @@
           <flowable:string>[{"name":"pizzaName","valueType":"expression","value":"PEPPERONY"}]</flowable:string>
         </flowable:field>
       </extensionElements>
-      <incoming>Flow_0mcrag0</incoming>
+      <incoming>Flow_1vwsntb</incoming>
       <outgoing>Flow_0haespa</outgoing>
     </serviceTask>
     <sequenceFlow id="Flow_0gybf8c" sourceRef="Activity_0dk4spi" targetRef="Activity_1mk9wly" />
@@ -284,13 +258,20 @@
       <incoming>Flow_0f07ze1</incoming>
       <outgoing>Flow_1ajdfny</outgoing>
     </serviceTask>
+    <sequenceFlow id="Flow_1vwsntb" sourceRef="Activity_0e6sxg5" targetRef="Activity_1oulw4b" />
+    <scriptTask id="Activity_0e6sxg5" name="Add greeting to message" scriptFormat="groovy">
+      <incoming>Flow_0mcrag0</incoming>
+      <outgoing>Flow_1vwsntb</outgoing>
+      <script>def messageWithGreeting = "Hi, " + pizzaEater.firstName + "! " + message   
+execution.setVariable("message",  messageWithGreeting) </script>
+    </scriptTask>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_process">
     <bpmndi:BPMNPlane id="BPMNPlane_process" bpmnElement="pizza-process">
       <bpmndi:BPMNShape id="BPMNShape_startEvent1" bpmnElement="startEvent1">
-        <omgdc:Bounds x="-215" y="255" width="30" height="30" />
+        <omgdc:Bounds x="-355" y="255" width="30" height="30" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="-238" y="292" width="77" height="14" />
+          <omgdc:Bounds x="-378" y="292" width="77" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_11t5j8i_di" bpmnElement="Activity_0c1cl9r">
@@ -317,6 +298,9 @@
       <bpmndi:BPMNShape id="Event_06wrpzs_di" bpmnElement="Event_06wrpzs">
         <omgdc:Bounds x="132" y="412" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0cjvvqa_di" bpmnElement="Event_0cjvvqa">
+        <omgdc:Bounds x="632" y="582" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0tm9bgj_di" bpmnElement="Activity_1oulw4b">
         <omgdc:Bounds x="-150" y="230" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -341,18 +325,19 @@
       <bpmndi:BPMNShape id="Activity_1eav3nn_di" bpmnElement="Activity_1u0098t">
         <omgdc:Bounds x="790" y="230" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0cjvvqa_di" bpmnElement="Event_0cjvvqa">
-        <omgdc:Bounds x="632" y="582" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ppyv4b_di" bpmnElement="Activity_0bbp1cx">
         <omgdc:Bounds x="600" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18oskt3_di" bpmnElement="Activity_0e6sxg5">
+        <omgdc:Bounds x="-290" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1wyrw7u_di" bpmnElement="Event_0bfi2r4">
         <omgdc:Bounds x="592" y="212" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0mcrag0_di" bpmnElement="Flow_0mcrag0">
-        <omgdi:waypoint x="-185" y="270" />
-        <omgdi:waypoint x="-150" y="270" />
+        <omgdi:waypoint x="-325" y="270" />
+        <omgdi:waypoint x="-290" y="270" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17avi1j_di" bpmnElement="Flow_17avi1j">
         <omgdi:waypoint x="100" y="270" />
@@ -427,6 +412,10 @@
       <bpmndi:BPMNEdge id="Flow_1ajdfny_di" bpmnElement="Flow_1ajdfny">
         <omgdi:waypoint x="650" y="540" />
         <omgdi:waypoint x="650" y="582" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vwsntb_di" bpmnElement="Flow_1vwsntb">
+        <omgdi:waypoint x="-190" y="270" />
+        <omgdi:waypoint x="-150" y="270" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

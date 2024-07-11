@@ -4,38 +4,17 @@
     <startEvent id="startEvent1" name="Feed developer">
       <documentation>Start event of the pizza process</documentation>
       <extensionElements>
-        <jmix:formData type="input-dialog" openMode="DIALOG">
-          <jmix:formFields>
-            <jmix:formField id="message" caption="" type="string" editable="true" required="false" />
-            <jmix:formField id="pizzaEater" caption="" type="entity" editable="true" required="true">
-              <jmix:formFieldProperty name="entityName" value="User" />
-              <jmix:formFieldProperty name="uiComponent" value="entityPicker" />
-              <jmix:formFieldProperty name="lookupScreen" value="" />
-            </jmix:formField>
-          </jmix:formFields>
-        </jmix:formData>
+        <jmix:formData type="jmix-screen" openMode="DIALOG" screenId="StartPizzaProcessForm" />
       </extensionElements>
       <outgoing>Flow_0mcrag0</outgoing>
     </startEvent>
     <userTask id="Activity_0c1cl9r" name="Choose pizza" flowable:assignee="${pizzaEater.username}" jmix:assigneeSource="processVariable" jmix:assigneeValue="pizzaEater">
       <documentation>Now it uses the class for the Pizza item selection</documentation>
       <extensionElements>
-        <jmix:formData type="input-dialog" openMode="DIALOG">
-          <jmix:formFields>
-            <jmix:formField id="message" caption="Message" type="string" editable="false" required="false" />
-            <jmix:formField id="pizzaItem" caption="" type="entity-list" editable="true" required="true">
-              <jmix:formFieldProperty name="uiComponent" value="ComboBox" />
-              <jmix:formFieldProperty name="entityName" value="PizzaType" />
-              <jmix:formFieldProperty name="query" value="select p from PizzaType p" />
-              <jmix:formFieldEnumValue value="MARGARITA" caption="Margarita" />
-              <jmix:formFieldEnumValue value="FOUR_CHEASES" caption="Four cheases" />
-              <jmix:formFieldEnumValue value="WITH_MEAT" caption="With meat" />
-            </jmix:formField>
-            <jmix:formField id="specialRequrements" caption="" type="multilineString" editable="true" required="false" />
-          </jmix:formFields>
+        <jmix:formData type="jmix-screen" openMode="DIALOG" screenId="ChoosePizzaForm">
           <jmix:formOutcomes>
-            <jmix:formOutcome id="chosen" caption="Chosen" icon="THUMBS_UP" />
-            <jmix:formOutcome id="not_hungry" caption="Not hungry" icon="THUMBS_DOWN" />
+            <jmix:formOutcome id="chosen" />
+            <jmix:formOutcome id="notHungry" />
           </jmix:formOutcomes>
         </jmix:formData>
       </extensionElements>
@@ -46,26 +25,10 @@
       <extensionElements>
         <jmix:springBean beanName="randomRobinUserProvider" methodName="getUser" />
         <flowable:taskListener class="com.company.bpmdemo.listener.ApproverAssignedListener" event="assignment" />
-        <jmix:formData type="input-dialog" openMode="DIALOG">
-          <jmix:formFields>
-            <jmix:formField id="approverMessage" caption="Approver message" type="string" editable="true" required="false" />
-            <jmix:formField id="pizzaEater" caption="Pizza eater" type="entity" editable="false" required="false">
-              <jmix:formFieldProperty name="entityName" value="User" />
-              <jmix:formFieldProperty name="uiComponent" value="entityPicker" />
-              <jmix:formFieldProperty name="lookupScreen" value="" />
-            </jmix:formField>
-            <jmix:formField id="pizzaItem" caption="Pizza item" type="entity-list" editable="false" required="false">
-              <jmix:formFieldProperty name="entityName" value="PizzaType" />
-              <jmix:formFieldProperty name="uiComponent" value="comboBox" />
-              <jmix:formFieldProperty name="query" value="select p from PizzaType p" />
-              <jmix:formFieldEnumValue value="MARGARITA" caption="Margarita" />
-              <jmix:formFieldEnumValue value="FOUR_CHEASES" caption="Four cheases" />
-              <jmix:formFieldEnumValue value="WITH_MEAT" caption="With meat" />
-            </jmix:formField>
-          </jmix:formFields>
+        <jmix:formData type="jmix-screen" openMode="DIALOG" screenId="ApproveOrderProcessForm">
           <jmix:formOutcomes>
-            <jmix:formOutcome id="approved" caption="Approved" icon="THUMBS_UP" />
-            <jmix:formOutcome id="rejected" caption="Rejected" icon="BAN" />
+            <jmix:formOutcome id="submit" />
+            <jmix:formOutcome id="reject" />
           </jmix:formOutcomes>
         </jmix:formData>
       </extensionElements>
@@ -74,26 +37,7 @@
     </userTask>
     <userTask id="Activity_0lkhaew" name="Place order" flowable:assignee="${initiator.username}" jmix:assigneeSource="processVariable" jmix:assigneeValue="initiator">
       <extensionElements>
-        <jmix:formData type="input-dialog" openMode="DIALOG">
-          <jmix:formFields>
-            <jmix:formField id="approverMessage" caption="" type="string" editable="false" required="false" />
-            <jmix:formField id="pizzaEater" caption="Pizza eater" type="entity" editable="false" required="false">
-              <jmix:formFieldProperty name="entityName" value="User" />
-              <jmix:formFieldProperty name="uiComponent" value="entityPicker" />
-              <jmix:formFieldProperty name="lookupScreen" value="" />
-            </jmix:formField>
-            <jmix:formField id="pizzaItem" caption="Pizza item" type="entity-list" editable="false" required="false">
-              <jmix:formFieldProperty name="uiComponent" value="entityPicker" />
-              <jmix:formFieldProperty name="entityName" value="PizzaType" />
-              <jmix:formFieldProperty name="lookupScreen" value="PizzaType.list" />
-              <jmix:formFieldEnumValue value="MARGARITA" caption="Margarita" />
-              <jmix:formFieldEnumValue value="FOUR_CHEASES" caption="Four cheases" />
-              <jmix:formFieldEnumValue value="WITH_MEAT" caption="With meat" />
-            </jmix:formField>
-            <jmix:formField id="specialRequrements" caption="Special requrements" type="multilineString" editable="false" required="false" />
-            <jmix:formField id="deliveryNumber" caption="" type="string" editable="true" required="true" />
-          </jmix:formFields>
-        </jmix:formData>
+        <jmix:formData type="jmix-screen" openMode="DIALOG" screenId="PlaceOrderProcessForm" />
       </extensionElements>
       <incoming>Flow_09csjwl</incoming>
       <outgoing>Flow_02cpjsa</outgoing>
@@ -317,6 +261,9 @@
       <bpmndi:BPMNShape id="Event_06wrpzs_di" bpmnElement="Event_06wrpzs">
         <omgdc:Bounds x="132" y="412" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0cjvvqa_di" bpmnElement="Event_0cjvvqa">
+        <omgdc:Bounds x="632" y="582" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0tm9bgj_di" bpmnElement="Activity_1oulw4b">
         <omgdc:Bounds x="-150" y="230" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -340,9 +287,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1eav3nn_di" bpmnElement="Activity_1u0098t">
         <omgdc:Bounds x="790" y="230" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0cjvvqa_di" bpmnElement="Event_0cjvvqa">
-        <omgdc:Bounds x="632" y="582" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ppyv4b_di" bpmnElement="Activity_0bbp1cx">
         <omgdc:Bounds x="600" y="460" width="100" height="80" />

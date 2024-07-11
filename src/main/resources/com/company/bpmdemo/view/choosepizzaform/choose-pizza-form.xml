@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://choosePizzaForm.title">
+    <layout>
+        <formLayout>
+            <textField datatype="string" enabled="false" id="messageField"
+                       label="msg://choosePizzaForm.variable.message"/>
+            <entityPicker id="pizzaTypeField" label="msg://choosePizzaForm.variable.pizzaType" metaClass="PizzaType"
+                          required="true">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <textArea datatype="string" id="specialRequrementsField"
+                      label="msg://choosePizzaForm.variable.specialRequrements"/>
+        </formLayout>
+        <hbox id="actionsPanel">
+            <button id="chosenBtn" icon="CHECK" text="msg://choosePizzaForm.outcome.chosen" themeNames="primary"/>
+            <button id="notHungryBtn" icon="BAN" text="msg://choosePizzaForm.outcome.notHungry"/>
+        </hbox>
+    </layout>
+</view>

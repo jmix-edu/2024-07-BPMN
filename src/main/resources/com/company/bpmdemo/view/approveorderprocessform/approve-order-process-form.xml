@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://approveOrderProcessForm.title">
+    <layout>
+        <formLayout>
+            <entityPicker enabled="false" id="pizzaEaterField" label="msg://approveOrderProcessForm.variable.pizzaEater"
+                          metaClass="User">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <h3 text="msg://approveOrderProcessForm.variable.approverMessage"/>
+            <textField datatype="string" id="approverMessageField"
+                       required="true"/>
+        </formLayout>
+        <hbox id="actionsPanel">
+            <button id="submitBtn" icon="CHECK" text="msg://approveOrderProcessForm.outcome.submit"
+                    themeNames="primary"/>
+            <button id="rejectBtn" icon="BAN" text="msg://approveOrderProcessForm.outcome.reject"/>
+        </hbox>
+    </layout>
+</view>

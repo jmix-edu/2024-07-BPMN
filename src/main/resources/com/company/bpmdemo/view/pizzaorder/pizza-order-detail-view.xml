@@ -37,6 +37,7 @@
             <textField id="deliveryNumberField" property="deliveryNumber"/>
             <dateTimePicker id="openedField" property="opened"/>
             <dateTimePicker id="closedField" property="closed"/>
+            <textArea id="statusField" property="status"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseBtn" action="saveAction"/>
