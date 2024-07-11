@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.flowable.org/processdef" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+  <process id="start-by-cron" name="Start by cron" isExecutable="true">
+    <startEvent id="startEvent1" name="Cron start event">
+      <outgoing>Flow_09deuyi</outgoing>
+      <timerEventDefinition id="TimerEventDefinition_0vmuera">
+        <timeCycle xsi:type="tFormalExpression">0 0/5 * * * ?</timeCycle>
+      </timerEventDefinition>
+    </startEvent>
+    <sequenceFlow id="Flow_09deuyi" sourceRef="startEvent1" targetRef="Event_0qvq9ss" />
+    <endEvent id="Event_0qvq9ss">
+      <incoming>Flow_09deuyi</incoming>
+    </endEvent>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_process">
+    <bpmndi:BPMNPlane id="BPMNPlane_process" bpmnElement="start-by-cron">
+      <bpmndi:BPMNShape id="Event_1spuigh_di" bpmnElement="startEvent1">
+        <omgdc:Bounds x="150" y="150" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="129" y="193" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0qvq9ss_di" bpmnElement="Event_0qvq9ss">
+        <omgdc:Bounds x="412" y="150" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_09deuyi_di" bpmnElement="Flow_09deuyi">
+        <omgdi:waypoint x="186" y="168" />
+        <omgdi:waypoint x="412" y="168" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

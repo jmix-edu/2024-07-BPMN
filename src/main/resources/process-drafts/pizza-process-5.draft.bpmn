@@ -16,7 +16,7 @@
       </extensionElements>
       <outgoing>Flow_0mcrag0</outgoing>
     </startEvent>
-    <userTask id="Activity_0c1cl9r" name="Choose pizza" flowable:assignee="${null.username}" jmix:assigneeSource="processVariable">
+    <userTask id="Activity_0c1cl9r" name="Choose pizza" flowable:assignee="${pizzaEater.username}" jmix:assigneeSource="processVariable" jmix:assigneeValue="pizzaEater">
       <extensionElements>
         <jmix:formData type="input-dialog" openMode="DIALOG">
           <jmix:formFields>
@@ -37,7 +37,7 @@
       <incoming>Flow_0mcrag0</incoming>
       <outgoing>Flow_17avi1j</outgoing>
     </userTask>
-    <userTask id="Activity_1gti8fm" name="Approve order" flowable:candidateGroups="acnts" jmix:assigneeSource="expression" jmix:candidateGroupsValue="acnts">
+    <userTask id="Activity_1gti8fm" name="Approve order" flowable:assignee="${randomRobinUserProvider.getUser()}" jmix:assigneeSource="userProvider" jmix:assigneeValue="randomRobinUserProvider">
       <extensionElements>
         <jmix:formData type="input-dialog" openMode="DIALOG">
           <jmix:formFields>
@@ -58,19 +58,16 @@
             <jmix:formOutcome id="rejected" caption="Rejected" icon="BAN" />
           </jmix:formOutcomes>
         </jmix:formData>
+        <jmix:springBean beanName="randomRobinUserProvider" methodName="getUser" />
+        <flowable:taskListener class="com.company.bpmdemo.listener.ApproverAssignedListener" event="assignment" />
       </extensionElements>
       <incoming>Flow_1ky0a2j</incoming>
       <outgoing>Flow_1moxnwb</outgoing>
     </userTask>
-    <userTask id="Activity_0lkhaew" name="Place order" flowable:assignee="peter" jmix:assigneeSource="expression" jmix:assigneeValue="peter">
+    <userTask id="Activity_0lkhaew" name="Place order" flowable:assignee="${initiator.username}" jmix:assigneeSource="processVariable" jmix:assigneeValue="initiator">
       <extensionElements>
         <jmix:formData type="input-dialog" openMode="DIALOG">
           <jmix:formFields>
-            <jmix:formField id="approver" caption="Approver" type="entity" editable="false" required="false">
-              <jmix:formFieldProperty name="entityName" value="User" />
-              <jmix:formFieldProperty name="uiComponent" value="entityPicker" />
-              <jmix:formFieldProperty name="lookupScreen" value="" />
-            </jmix:formField>
             <jmix:formField id="approverMessage" caption="" type="string" editable="false" required="false" />
             <jmix:formField id="pizzaEater" caption="Pizza eater" type="entity" editable="false" required="false">
               <jmix:formFieldProperty name="entityName" value="User" />
@@ -87,7 +84,7 @@
           </jmix:formFields>
         </jmix:formData>
       </extensionElements>
-      <incoming>Flow_1nxq1us</incoming>
+      <incoming>Flow_03ck3e8</incoming>
       <outgoing>Flow_02cpjsa</outgoing>
     </userTask>
     <endEvent id="Event_05fw9jx" name="Enjoy pizza">
@@ -115,12 +112,11 @@
       <outgoing>Flow_0q0acy3</outgoing>
     </exclusiveGateway>
     <sequenceFlow id="Flow_1ky0a2j" name="Chosen" sourceRef="Gateway_0uhd6dc" targetRef="Activity_1gti8fm" />
-    <exclusiveGateway id="Gateway_0x8jrj9" default="Flow_1nxq1us">
+    <exclusiveGateway id="Gateway_0x8jrj9" default="Flow_19dt0h0">
       <incoming>Flow_1moxnwb</incoming>
-      <outgoing>Flow_1nxq1us</outgoing>
       <outgoing>Flow_0qb01ub</outgoing>
+      <outgoing>Flow_19dt0h0</outgoing>
     </exclusiveGateway>
-    <sequenceFlow id="Flow_1nxq1us" name="Approved" sourceRef="Gateway_0x8jrj9" targetRef="Activity_0lkhaew" />
     <endEvent id="Event_06wrpzs">
       <incoming>Flow_0q0acy3</incoming>
     </endEvent>
@@ -139,6 +135,20 @@
       </extensionElements>
       <conditionExpression xsi:type="tFormalExpression">${execution.getVariable('Activity_1gti8fm_result') != null &amp;&amp; bpm_UserTaskResults.containsOutcome(execution.getVariable('Activity_1gti8fm_result'), 'rejected')}</conditionExpression>
     </sequenceFlow>
+    <boundaryEvent id="Event_16xngk5" attachedToRef="Activity_1gti8fm">
+      <outgoing>Flow_0oa1077</outgoing>
+      <timerEventDefinition id="TimerEventDefinition_04arn39">
+        <timeDuration xsi:type="tFormalExpression">PT3M</timeDuration>
+      </timerEventDefinition>
+    </boundaryEvent>
+    <exclusiveGateway id="Gateway_0mue63d">
+      <incoming>Flow_19dt0h0</incoming>
+      <incoming>Flow_0oa1077</incoming>
+      <outgoing>Flow_03ck3e8</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="Flow_19dt0h0" sourceRef="Gateway_0x8jrj9" targetRef="Gateway_0mue63d" />
+    <sequenceFlow id="Flow_03ck3e8" sourceRef="Gateway_0mue63d" targetRef="Activity_0lkhaew" />
+    <sequenceFlow id="Flow_0oa1077" sourceRef="Event_16xngk5" targetRef="Gateway_0mue63d" />
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_process">
     <bpmndi:BPMNPlane id="BPMNPlane_process" bpmnElement="pizza-process">
@@ -175,6 +185,12 @@
       <bpmndi:BPMNShape id="Event_0cjvvqa_di" bpmnElement="Event_0cjvvqa">
         <omgdc:Bounds x="672" y="412" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0mue63d_di" bpmnElement="Gateway_0mue63d" isMarkerVisible="true">
+        <omgdc:Bounds x="745" y="245" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_15wupam_di" bpmnElement="Event_16xngk5">
+        <omgdc:Bounds x="592" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0mcrag0_di" bpmnElement="Flow_0mcrag0">
         <omgdi:waypoint x="145" y="270" />
         <omgdi:waypoint x="230" y="270" />
@@ -198,13 +214,6 @@
           <omgdc:Bounds x="459" y="252" width="38" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1nxq1us_di" bpmnElement="Flow_1nxq1us">
-        <omgdi:waypoint x="715" y="270" />
-        <omgdi:waypoint x="820" y="270" />
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="744" y="252" width="48" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0q0acy3_di" bpmnElement="Flow_0q0acy3">
         <omgdi:waypoint x="420" y="295" />
         <omgdi:waypoint x="420" y="412" />
@@ -218,6 +227,19 @@
         <bpmndi:BPMNLabel>
           <omgdc:Bounds x="683" y="351" width="44" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19dt0h0_di" bpmnElement="Flow_19dt0h0">
+        <omgdi:waypoint x="715" y="270" />
+        <omgdi:waypoint x="745" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03ck3e8_di" bpmnElement="Flow_03ck3e8">
+        <omgdi:waypoint x="795" y="270" />
+        <omgdi:waypoint x="820" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oa1077_di" bpmnElement="Flow_0oa1077">
+        <omgdi:waypoint x="628" y="230" />
+        <omgdi:waypoint x="770" y="230" />
+        <omgdi:waypoint x="770" y="245" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

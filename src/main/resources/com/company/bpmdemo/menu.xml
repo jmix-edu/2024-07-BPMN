@@ -3,6 +3,9 @@
 
     <menu id="application" title="msg://com.company.bpmdemo/menu.application.title" opened="true">
         <item view="User.list" title="msg://com.company.bpmdemo.view.user/UserListView.title"/>
+        <item view="PizzaOrder.list" title="msg://com.company.bpmdemo.view.pizzaorder/pizzaOrderListView.title"/>
+        <item view="OrderLine.list" title="msg://com.company.bpmdemo.view.orderline/orderLineListView.title"/>
+        <item view="PizzaType.list" title="msg://com.company.bpmdemo.view.pizzatype/pizzaTypeListView.title"/>
     </menu>
 
 </menu-config>

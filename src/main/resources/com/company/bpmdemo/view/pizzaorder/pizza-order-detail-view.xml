@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://pizzaOrderDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="pizzaOrderDc"
+                  class="com.company.bpmdemo.entity.PizzaOrder">
+            <fetchPlan extends="_base">
+                <property name="orderLines" fetchPlan="_base"/>
+                <property name="initiator" fetchPlan="_base"/>
+                <property name="approver" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="pizzaOrderDc">
+            <entityPicker id="initiatorField" property="initiator">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <entityPicker id="approverField" property="approver">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <textField id="deliveryNumberField" property="deliveryNumber"/>
+            <dateTimePicker id="openedField" property="opened"/>
+            <dateTimePicker id="closedField" property="closed"/>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseBtn" action="saveAction"/>
+            <button id="closeBtn" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

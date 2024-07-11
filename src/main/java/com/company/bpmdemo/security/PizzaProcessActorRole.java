@@ -1,5 +1,8 @@
 package com.company.bpmdemo.security;
 
+import com.company.bpmdemo.entity.OrderLine;
+import com.company.bpmdemo.entity.PizzaOrder;
+import com.company.bpmdemo.entity.PizzaType;
 import com.company.bpmdemo.entity.User;
 import io.jmix.security.model.EntityAttributePolicyAction;
 import io.jmix.security.model.EntityPolicyAction;
@@ -18,9 +21,20 @@ public interface PizzaProcessActorRole {
     void user();
 
     @MenuPolicy(menuIds = "User.list")
-    @ViewPolicy(viewIds = {"User.list", "User.detail", "MainView", "LoginView"})
     void screens();
 
     @ViewPolicy(viewIds = "*")
     void view();
+
+    @EntityAttributePolicy(entityClass = OrderLine.class, attributes = "*", action = EntityAttributePolicyAction.MODIFY)
+    @EntityPolicy(entityClass = OrderLine.class, actions = EntityPolicyAction.ALL)
+    void orderLine();
+
+    @EntityAttributePolicy(entityClass = PizzaOrder.class, attributes = "*", action = EntityAttributePolicyAction.MODIFY)
+    @EntityPolicy(entityClass = PizzaOrder.class, actions = EntityPolicyAction.ALL)
+    void pizzaOrder();
+
+    @EntityAttributePolicy(entityClass = PizzaType.class, attributes = "*", action = EntityAttributePolicyAction.MODIFY)
+    @EntityPolicy(entityClass = PizzaType.class, actions = EntityPolicyAction.ALL)
+    void pizzaType();
 }
